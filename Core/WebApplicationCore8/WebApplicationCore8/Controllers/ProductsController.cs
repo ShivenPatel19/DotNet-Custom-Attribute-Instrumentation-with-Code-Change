@@ -185,6 +185,62 @@ namespace WebApplicationCore8.Controllers
             return NoContent();
         }
 
+        // GET: api/Products/test-attributes
+        [HttpGet("test-attributes")]
+        public ActionResult<object> TestCustomAttributes()
+        {
+            // Get the current active span created by auto-instrumentation
+            var currentActivity = Activity.Current;
+
+            // Test all data types
+            bool boolValue = true;
+            double doubleValue = 123.456;
+            float floatValue = 789.012f;
+            int intValue = 42;
+            long longValue = 9876543210L;
+            string stringValue = "Hello OpenTelemetry";
+
+            bool[] boolArray = new[] { true, false, true };
+            double[] doubleArray = new[] { 1.1, 2.2, 3.3 };
+            float[] floatArray = new[] { 4.4f, 5.5f, 6.6f };
+            int[] intArray = new[] { 10, 20, 30 };
+            long[] longArray = new[] { 100L, 200L, 300L };
+            string[] stringArray = new[] { "first", "second", "third" };
+
+            // Add all data types as custom attributes
+            currentActivity?.SetTag("apm.test.bool", boolValue);
+            currentActivity?.SetTag("apm.test.double", doubleValue);
+            currentActivity?.SetTag("apm.test.float", floatValue);
+            currentActivity?.SetTag("apm.test.int", intValue);
+            currentActivity?.SetTag("apm.test.long", longValue);
+            currentActivity?.SetTag("apm.test.string", stringValue);
+
+            currentActivity?.SetTag("apm.test.bool_array", boolArray);
+            currentActivity?.SetTag("apm.test.double_array", doubleArray);
+            currentActivity?.SetTag("apm.test.float_array", floatArray);
+            currentActivity?.SetTag("apm.test.int_array", intArray);
+            currentActivity?.SetTag("apm.test.long_array", longArray);
+            currentActivity?.SetTag("apm.test.string_array", stringArray);
+
+            // Return all values for verification
+            return Ok(new
+            {
+                bool_value = boolValue,
+                double_value = doubleValue,
+                float_value = floatValue,
+                int_value = intValue,
+                long_value = longValue,
+                string_value = stringValue,
+                bool_array = boolArray,
+                double_array = doubleArray,
+                float_array = floatArray,
+                int_array = intArray,
+                long_array = longArray,
+                string_array = stringArray,
+                message = "Check the trace for all custom attributes with apm.test.* prefix"
+            });
+        }
+
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.Id == id);

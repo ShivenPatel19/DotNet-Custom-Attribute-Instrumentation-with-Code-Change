@@ -17,6 +17,72 @@ namespace WebApplicationCore9.Controllers
             _context = context;
         }
 
+        // GET: api/Products/test-attributes
+        [HttpGet("test-attributes")]
+        public ActionResult<object> TestCustomAttributes()
+        {
+            // Create a custom span for testing all data types
+            using (var activity = AppTelemetry.ActivitySource.StartActivity("TestCustomAttributes"))
+            {
+                // Create variables of all supported types
+                bool boolValue = true;
+                double doubleValue = 123.456;
+                float floatValue = 789.012f;
+                int intValue = 42;
+                long longValue = 9876543210L;
+                string stringValue = "Hello OpenTelemetry";
+
+                bool[] boolArray = new[] { true, false, true };
+                double[] doubleArray = new[] { 1.1, 2.2, 3.3 };
+                float[] floatArray = new[] { 4.4f, 5.5f, 6.6f };
+                int[] intArray = new[] { 10, 20, 30 };
+                long[] longArray = new[] { 100L, 200L, 300L };
+                string[] stringArray = new[] { "first", "second", "third" };
+
+                // Add all types as custom attributes to the span
+                activity?.SetTag("apm.test.bool", boolValue);
+                activity?.SetTag("apm.test.double", doubleValue);
+                activity?.SetTag("apm.test.float", floatValue);
+                activity?.SetTag("apm.test.int", intValue);
+                activity?.SetTag("apm.test.long", longValue);
+                activity?.SetTag("apm.test.string", stringValue);
+
+                activity?.SetTag("apm.test.bool_array", boolArray);
+                activity?.SetTag("apm.test.double_array", doubleArray);
+                activity?.SetTag("apm.test.float_array", floatArray);
+                activity?.SetTag("apm.test.int_array", intArray);
+                activity?.SetTag("apm.test.long_array", longArray);
+                activity?.SetTag("apm.test.string_array", stringArray);
+
+                activity?.SetTag("apm.operation", "test_attributes");
+                activity?.SetTag("apm.status", "success");
+
+                // Return the values in the response
+                return Ok(new
+                {
+                    message = "Testing all custom attribute types",
+                    primitiveTypes = new
+                    {
+                        boolValue,
+                        doubleValue,
+                        floatValue,
+                        intValue,
+                        longValue,
+                        stringValue
+                    },
+                    arrayTypes = new
+                    {
+                        boolArray,
+                        doubleArray,
+                        floatArray,
+                        intArray,
+                        longArray,
+                        stringArray
+                    }
+                });
+            }
+        }
+
         // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
