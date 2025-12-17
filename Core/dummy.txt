@@ -1,0 +1,5 @@
+.net core 8
+
+.net core 9
+For new span: 
+SERVICE_NAME=DotNetCustomAttribute2 OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES="WebApplicationCore9.Business" source /motadata/motadata/instrumentation/agents/dotnet/motadata-dotnet-auto-install.sh dotnet run
